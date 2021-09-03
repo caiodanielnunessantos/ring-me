@@ -1,0 +1,41 @@
+<html>
+  <body>
+    <div style="text-align: center;">
+      <button id="chamar">Clique aqui para chamar</button>
+      <button id="naochamar">Clique aqui para parar de tocar</button>
+    </div>
+    <script>
+      const style_green = 'color: green; font-size: 4rem;';
+      const style_red = 'color: red; font-size: 4rem;';
+      const should_display = 'display: block; font-size: 7rem';
+      const should_not_display = 'display: none; font-size: 7rem';
+      let element = document.createElement('div');
+      function update() {
+        fetch('chamando')
+          .then(a => a.json())
+          .then((chamando) => {
+            element.innerText = chamando.tocando ? 'Está Tocando' : 'Está Parado';
+            element.style = chamando.tocando ? style_green : style_red;
+            document.getElementById('chamar')
+              .style = chamando.tocando ? should_not_display : should_display;
+            document.getElementById('naochamar')
+              .style = chamando.tocando ? should_display : should_not_display;
+          });
+      }
+      update();
+      setInterval(update, 100);
+      document.getElementsByTagName('body')[0]
+        .appendChild(element);
+      document.getElementById('chamar')
+        .addEventListener('click', function() {
+          fetch('chamar');
+          update();
+        });
+      document.getElementById('naochamar')
+        .addEventListener('click', function() {
+          fetch('naochamar');
+          update();
+        });
+    </script>
+  </body>
+</html>
